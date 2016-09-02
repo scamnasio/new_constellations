@@ -20,6 +20,8 @@
     var lastDEC=0;
     var firstClick; //to know when to start a new line
     var lastLine;   //to be able to delete a line
+    
+    
 
 
     // This function initializes the wwt object and registers the wwtReady event
@@ -125,6 +127,15 @@
         firstClick=true;
     }
 
+    function print() {
+      var c = document.getElementById("WWTCanvas");
+      var dataString = c.toDataURL("image/png");
+      window.open(dataString);
+
+      // var img = wwt.toDataURL("image/png");
+      // document.write('<img src="'+img+'"/>');
+      
+    }
 
 
 
@@ -183,6 +194,14 @@
         <td> <input id="Figures" type="checkbox" checked="checked" onclick="toggleSetting('ShowFigures');"/></td>
      </tr>
         <tr>
+      <!-- <tr>
+        <td style="font-family:lucida grande"> Done </td>
+        <td> <input id="clear" type="button" value="Clear" disabled='disabled' onclick="clearAnnotations();"/> </td>
+     </tr> -->
+     <tr>
+        <td style="font-family:lucida grande"> Print output </td>
+        <td> <input id="Print" type="button" value="print" onclick="print();"/> </td>
+     </tr>
         <td style="font-family:lucida grande"> Clear all the current constellations</td>
         <td> <input id="clear" type="button" value="Clear" onclick="clearAnnotations();"/> 
              <input id="undo" type="button" value="Undo" onclick="undo();"/> </td>
