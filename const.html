@@ -127,17 +127,6 @@
         firstClick=true;
     }
 
-    function print() {
-      var c = document.getElementById("WWTCanvas");
-      var dataString = c.toDataURL("image/png");
-      window.open(dataString);
-
-      // var img = wwt.toDataURL("image/png");
-      // document.write('<img src="'+img+'"/>');
-      
-    }
-
-
 
     //undo function
     function undo() {     
@@ -164,21 +153,21 @@
      <table border="0" cellspacing="4" cellpadding="4" bgcolor="D3D3D3">
     
     <tr>
-    <th colspan="2"><h2 style="font-family:lucida grande">Draw your own constellations!</h2></th>
+    <th colspan="2"><h2 style="font-family:lucida grande">Re-invent the constellations! </h2></th>
     </tr>
 
     <tr>
-    <th colspan="2"><h5 style="font-family:lucida grande">Re-invent the constellations! Click to select a starting object and connect stars in the sky to create your own constellations.</h5></th>
+    <th colspan="2"><h5 style="font-family:lucida grande">Click to select a starting object and connect stars in the sky to create your own constellations.</h5></th>
     </tr>
             
-    <tr>
+    <!-- <tr>
     <th colspan = "2"> 
     <input type="button" id="Sagittarius" value="Goto Sagittarius" onclick="GotoConstellation('Sagittarius')"/>
     <input type="button" id="Aquarius" value="Goto Aquarius" onclick="GotoConstellation('Aquarius')"/></th>        
-    </tr>
-    <tr>
+    </tr> -->
+    <!-- <tr>
     <th style="font-family:lucida grande" colspan = "2">Settings</th>
-    </tr>
+    </tr> -->
     
 <!--    <tr>
         <td> Show UI </td>
@@ -190,7 +179,7 @@
         <td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
      </tr>
      <tr>
-        <td style="font-family:lucida grande"> Show Figures </td>
+        <td style="font-family:lucida grande"> Show IAU Constellations </td>
         <td> <input id="Figures" type="checkbox" checked="checked" onclick="toggleSetting('ShowFigures');"/></td>
      </tr>
         <tr>
@@ -198,14 +187,19 @@
         <td style="font-family:lucida grande"> Done </td>
         <td> <input id="clear" type="button" value="Clear" disabled='disabled' onclick="clearAnnotations();"/> </td>
      </tr> -->
-     <tr>
-        <td style="font-family:lucida grande"> Print output </td>
-        <td> <input id="Print" type="button" value="print" onclick="print();"/> </td>
-     </tr>
-        <td style="font-family:lucida grande"> Clear all the current constellations</td>
-        <td> <input id="clear" type="button" value="Clear" onclick="clearAnnotations();"/> 
-             <input id="undo" type="button" value="Undo" onclick="undo();"/> </td>
+        <tr>
+          <td style="font-family:lucida grande"> Delete Last Line </td>
+          <td> <input id="undo" type="button" value="Undo" onclick="undo();"/> </td>
+        </tr>
         
+        <tr>
+          <td style="font-family:lucida grande"> Clear All Lines </td>
+          <td> <input id="clear" type="button" value="Clear" onclick="clearAnnotations();"/> </td>
+        </tr>
+        
+        <tr>
+        <td style="font-family:lucida grande"> Print Page </td>
+        <td> <input id="btn-download" value="Print" type="button" onclick="print();"/> </td>
         </tr>
 
 </table>
