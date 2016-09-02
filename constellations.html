@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" content="chrome=1, IE=edge" http-equiv="X-UA-Compatible" />
+  
+    <title>WWT Web Client Click Event</title>
+    <script src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>    
+    <script>
+     // Create the WorldWide telescope object variable
+    var wwt;
+    // Create variables to hold the changeable settings
+    var bShowCrosshairs = true;
+    var bShowUI = true;
+    var bShowFigures = true;
+    var bDraw = true;
+    var bShowAlerts = false;
+
+    //Create variables to keep last RA and DEC 
+    var lastRA=0;
+    var lastDEC=0;
+    var firstClick; //to know when to start a new line
+    var lastLine;   //to be able to delete a line
+    
+    
+
+
+    // This function initializes the wwt object and registers the wwtReady event
+    // once the initialization is done the wwtReady event will be fired
+    function initialize() {
+        wwt = wwtlib.WWTControl.initControl("WWTCanvas");
+        wwt.add_ready(wwtReady);
+        wwt.add_clicked(wwtClick);
+        
+        // // Prevent mouse wheel from scrolling page up-down:
+        // window.onwheel = function(){ stopWheel(); } /* IE7, IE8 */
+        // if(window.addEventListener){ /* Chrome, Safari, Firefox */
+        //     window.addEventListener('DOMMouseScroll', stopWheel, false);
+        //     }
+    }
+    
+     // A simple function to toggle the settings
+    // This function is called from the checkbox entries setup in the html table
+    function toggleSetting(text) {
+        switch (text) {
+            case 'ShowUI':
+                bShowUI = !bShowUI;
+                wwt.hideUI(!bShowUI);
+                break;
+             case 'ShowCrosshairs':
+                bShowCrosshairs = !bShowCrosshairs;
+                wwt.settings.set_showCrosshairs(bShowCrosshairs);
+                break;
+             case 'ShowFigures':
+                bShowFigures = !bShowFigures;
+                wwt.settings.set_showConstellationFigures(bShowFigures);
+                break;
+             case 'Draw':
+                bDraw = !bDraw;
+                break;
+                
+        }
+    }
+
+
+
+
+    //create polyline
+    function createWWTPolyLine(lineColor, lineWidth, opacity, points) {
+
+         var polyLine = wwt.createPolyLine();
+         polyLine.set_lineColor(lineColor);
+         polyLine.set_lineWidth(lineWidth);
+         polyLine.set_opacity(opacity);
+
+         for(var i in points) {
+             polyLine.addPoint(points[i][0], points[i][1]);
+         }
+         return polyLine;
+    } 
+     
+     //function for mouse click
+     function wwtClick(obj, eventArgs) {
+          //if first click: store RA,DEC; don't draw
+          if (firstClick) {
+              firstClick=false;
+              lastRA=eventArgs.get_RA();
+              lastDEC=eventArgs.get_dec();
+          }
+          //else: store new RA,DEC; draw
+          else {
+              var myPolyline = createWWTPolyLine("red", 2, 1.0, [[lastRA, lastDEC], [eventArgs.get_RA(), eventArgs.get_dec()]]);
+              wwt.addAnnotation(myPolyline);
+              lastRA=eventArgs.get_RA();
+              lastDEC=eventArgs.get_dec();
+              
+
+
+          }
+         
+         lastLine= myPolyline
+
+     }
+     
+    // The wwtReady function is called by the WWT Web Control software
+    // This function sets up the wwt object, and the initial defaults
+     function wwtReady() {
+        wwt.settings.set_showCrosshairs(bShowCrosshairs);
+        wwt.settings.set_showConstellationFigures(bShowFigures);
+        wwt.hideUI(!bShowUI);
+        wwt.settings.set_showConstellationBoundries(false);
+        firstClick=true;
+
+     }
+
+     // Simple function to clear all the annotations from the view
+     function clearAnnotations() {
+        if (confirm("Are you sure you want to clear all your constellations?") == true) {
+            wwt.clearAnnotations();
+            firstClick=true;
+        } else { ;}
+    }
+
+
+
+    //function for pressing any key
+    function anyKey() {
+        firstClick=true;
+    }
+
+
+    //undo function
+    function undo() {     
+        firstClick=true;
+        wwt.removeAnnotation(lastLine);
+    }
+
+
+
+
+     </script>
+ </head>
+ <body onload="initialize()" onkeypress="anyKey()">
+ <!-- The body section creates a table with two columns. The first contains the -->
+<!-- canvas object that the WWT web client uses as the render target. And the second a table within-->
+<!-- the table, containing some buttons and checkboxes.-->
+ <table border="2" bgcolor="black">
+    <tr><td>
+        <div id="WorldWideTelescopeControlHost">
+            <div id="WWTCanvas" style="width: 1000px; height: 650px; border-style: none; border-width: 0px;" ondblclick="dblclick()" >
+            </div>
+    </div>
+    </td><td>
+     <table border="0" cellspacing="4" cellpadding="4" bgcolor="D3D3D3">
+    
+    <tr>
+    <th colspan="2"><h2 style="font-family:lucida grande">Re-invent the constellations! </h2></th>
+    </tr>
+
+    <tr>
+    <th colspan="2"><h5 style="font-family:lucida grande">Click to select a starting object and connect stars in the sky to create your own constellations.</h5></th>
+    </tr>
+            
+    <!-- <tr>
+    <th colspan = "2"> 
+    <input type="button" id="Sagittarius" value="Goto Sagittarius" onclick="GotoConstellation('Sagittarius')"/>
+    <input type="button" id="Aquarius" value="Goto Aquarius" onclick="GotoConstellation('Aquarius')"/></th>        
+    </tr> -->
+    <!-- <tr>
+    <th style="font-family:lucida grande" colspan = "2">Settings</th>
+    </tr> -->
+    
+<!--    <tr>
+        <td> Show UI </td>
+        <td> <input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"/></td>
+     </tr>-->
+    
+    <tr>
+        <td style="font-family:lucida grande"> Show Crosshairs</td>
+        <td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
+     </tr>
+     <tr>
+        <td style="font-family:lucida grande"> Show IAU Constellations </td>
+        <td> <input id="Figures" type="checkbox" checked="checked" onclick="toggleSetting('ShowFigures');"/></td>
+     </tr>
+        <tr>
+      <!-- <tr>
+        <td style="font-family:lucida grande"> Done </td>
+        <td> <input id="clear" type="button" value="Clear" disabled='disabled' onclick="clearAnnotations();"/> </td>
+     </tr> -->
+        <tr>
+          <td style="font-family:lucida grande"> Delete Last Line </td>
+          <td> <input id="undo" type="button" value="Undo" onclick="undo();"/> </td>
+        </tr>
+        
+        <tr>
+          <td style="font-family:lucida grande"> Clear All Lines </td>
+          <td> <input id="clear" type="button" value="Clear" onclick="clearAnnotations();"/> </td>
+        </tr>
+        
+        <tr>
+        <td style="font-family:lucida grande"> Print Page </td>
+        <td> <input id="btn-download" value="Print" type="button" onclick="print();"/> </td>
+        </tr>
+
+</table>
+</td>
+</tr>
+</table>
+ </body>
+</html>
