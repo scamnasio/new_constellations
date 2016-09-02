@@ -1,4 +1,5 @@
-# new_constellations
+# My Star Map
+
 
 A World Wide Telescope-based interface that allows users to "draw" their own constellations in the night sky and print the output. 
 Currently in active development to implement the following:
