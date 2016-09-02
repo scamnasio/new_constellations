@@ -13,3 +13,4 @@ Currently in active development to implement the following:
 
 Developers: Sara Camnasio, Felipe Ardila
 Concept: Sara Camnasio, Adam Beal
+![badge-img](https://img.shields.io/badge/Made%20at-%23AstroHackWeek-8063d5.svg?style=flat)
