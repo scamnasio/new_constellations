@@ -18,7 +18,8 @@
     //Create variables to keep last RA and DEC 
     var lastRA=0;
     var lastDEC=0;
-    var firstClick;
+    var firstClick; //to know when to start a new line
+    var lastLine;   //to be able to delete a line
 
 
     // This function initializes the wwt object and registers the wwtReady event
@@ -74,9 +75,9 @@
          }
          return polyLine;
     } 
-
+     
+     //function for mouse click
      function wwtClick(obj, eventArgs) {
-         if (bDraw) {
           //if first click: store RA,DEC; don't draw
           if (firstClick) {
               firstClick=false;
@@ -93,7 +94,8 @@
 
 
           }
-         }
+         
+         lastLine= myPolyline
 
      }
      
@@ -110,16 +112,27 @@
 
      // Simple function to clear all the annotations from the view
      function clearAnnotations() {
-        if (confirm("Are you sure you want to clear all circles?") == true) {
+        if (confirm("Are you sure you want to clear all your constellations?") == true) {
             wwt.clearAnnotations();
             firstClick=true;
         } else { ;}
     }
 
+
+
+    //function for pressing any key
     function anyKey() {
         firstClick=true;
     }
 
+
+
+
+    //undo function
+    function undo() {     
+        firstClick=true;
+        wwt.removeAnnotation(lastLine);
+    }
 
 
 
@@ -182,9 +195,11 @@
      </tr> -->
         <tr>
         <td style="font-family:lucida grande"> Clear all the current constellations</td>
-        <td> <input id="clear" type="button" value="Clear" onclick="clearAnnotations();"/></td>
+        <td> <input id="clear" type="button" value="Clear" onclick="clearAnnotations();"/> 
+             <input id="undo" type="button" value="Undo" onclick="undo();"/> </td>
         
-    </tr>
+        </tr>
+
 </table>
 </td>
 </tr>
