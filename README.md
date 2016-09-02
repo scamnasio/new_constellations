@@ -1,4 +1,4 @@
-# My Star Map
+# Reconstellate
 
 
 A World Wide Telescope-based interface that allows users to "draw" their own constellations in the night sky and print the output. 
